@@ -1,11 +1,5 @@
 use std::env;
 
-#[derive(Debug)]
-enum PolynomialError {
-    DivByZero,
-
-}
-
 enum Polynomial {
     FirstDegreePolynomial(FirstDegreePolynomial),
     SecondDegreePolynomial(SecondDegreePolynomial),
@@ -109,16 +103,16 @@ fn extract_simplified_form(args: &[String]) -> Option<Polynomial> {
     }
 }
 
-fn calculate_first_degree_polynomial(a: f64, b: f64) -> Result<f64, PolynomialError> {
+fn calculate_first_degree_polynomial(a: f64, b: f64) -> f64 {
     if a == 0.0 {
-        return Err(PolynomialError::DivByZero);
+        panic!("No solution possible");
     }
-    Ok(-b / a)
+    -b / a
 }
 
-fn calculate_second_degree_polynomial(_a: f64, _b: f64, _c: f64) -> Result<(f64, f64), PolynomialError> {
-    return Err(PolynomialError::DivByZero);
-} 
+// fn calculate_second_degree_polynomial(_a: f64, _b: f64, _c: f64) -> Result<(f64, f64), PolynomialError> {
+    
+// } 
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -133,23 +127,16 @@ fn main() {
                 polynomial.a, polynomial.b
             );
             println!("Polynomial degree: 1");
-            match calculate_first_degree_polynomial(polynomial.a, polynomial.b) {
-                Ok(solution) => {
-                    println!("The solution is: {solution}");
-                    return;
-                }
-                Err(err) => {
-                    eprintln!("{err:?}");
-                    return;
-                }
-            }
+
+            let solution = calculate_first_degree_polynomial(polynomial.a, polynomial.b);
+            println!("The solution is: {solution}");
         }
         Polynomial::SecondDegreePolynomial(polynomial) => {
             println!(
                 "Reduced form: X^2 * {} + X^1 * {} + X^0 * {} = 0",
                 polynomial.a, polynomial.b, polynomial.c
             );
-            println!("Polynomial degree: 1");
+            println!("Polynomial degree: 2");
         }
     }
 }
