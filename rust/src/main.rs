@@ -103,6 +103,17 @@ fn extract_simplified_form(args: &[String]) -> Option<Polynomial> {
     }
 }
 
+fn calculate_first_degree_polynomial(a: f64, b: f64) -> Result<f64, Err> {
+    if a == 0.0 {
+        Err(DivByZero)
+    }
+    Ok(-b / a)
+}
+
+fn calculate_second_degree_polynomial(a: f64, b: f64, c: f64) -> Result<f64, Err> {
+
+} 
+
 fn main() {
     let args: Vec<String> = env::args().collect();
     let Some(equation) = extract_simplified_form(&args) else {
@@ -116,6 +127,8 @@ fn main() {
                 polynomial.a, polynomial.b
             );
             println!("Polynomial degree: 1");
+            let solution = calculate_first_degree_polynomial(polynomial.a, polynomial.b);
+            println!("The solution is: {}", solution);
         }
         Polynomial::SecondDegreePolynomial(polynomial) => {
             println!(
