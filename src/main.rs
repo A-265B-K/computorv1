@@ -104,15 +104,33 @@ fn extract_simplified_form(args: &[String]) -> Option<Polynomial> {
 }
 
 fn calculate_first_degree_polynomial(a: f64, b: f64) -> f64 {
-    if a == 0.0 {
-        panic!("No solution possible");
-    }
+    assert!(a != 0.0, "No solution possible");
     -b / a
 }
 
-// fn calculate_second_degree_polynomial(_a: f64, _b: f64, _c: f64) -> Result<(f64, f64), PolynomialError> {
-    
-// } 
+fn root(under_sq_root: f64) -> f64 {
+    assert!(under_sq_root >= 0.0, "No real solution is possible");
+    if under_sq_root == 0.0 {
+        return 0.0;
+    }
+
+    let mut x: f64 = under_sq_root;
+    let mut y: f64 = 1.0;
+    let e: f64 = 0.000_000_1;
+    while (x - y) > e {
+        x = (x + y) / 2.0;
+        y = under_sq_root / x;
+    }
+    x
+}
+
+fn calculate_second_degree_polynomial(a: f64, b: f64, c: f64) -> (f64, f64) {
+    let root = root(b * b - 4.0 * a * c);
+
+    let x0 = (-b - root) / (2.0 * a);
+    let x1 = (-b + root) / (2.0 * a);
+    (x0, x1)
+} 
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -137,6 +155,13 @@ fn main() {
                 polynomial.a, polynomial.b, polynomial.c
             );
             println!("Polynomial degree: 2");
+
+            let solution = calculate_second_degree_polynomial(polynomial.a, polynomial.b, polynomial.c);
+            if solution.0 == solution.1 {
+                println!("The solution is: {0}", solution.0);
+            } else {
+                println!("The solution is: {0}, {1}", solution.0, solution.1);
+            }
         }
     }
 }
