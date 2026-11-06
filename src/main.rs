@@ -118,7 +118,7 @@ fn root(under_sq_root: f64) -> f64 {
     let mut y: f64 = 1.0;
     let e: f64 = 0.000_000_1;
     while (x - y) > e {
-        x = (x + y) / 2.0;
+        x = x + (y - x) / 2.0;
         y = under_sq_root / x;
     }
     x
@@ -132,6 +132,7 @@ fn calculate_second_degree_polynomial(a: f64, b: f64, c: f64) -> (f64, f64) {
     (x0, x1)
 } 
 
+#[allow(clippy::float_cmp)]
 fn main() {
     let args: Vec<String> = env::args().collect();
     let Some(equation) = extract_simplified_form(&args) else {
